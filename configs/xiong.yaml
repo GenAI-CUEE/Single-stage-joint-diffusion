@@ -1,0 +1,165 @@
+Data:
+  csv_label: sirta_data_2023.csv
+  data_folder: sirta_2023_image64-localtime_ICHP-daytime-dhi
+  pickle_image: sirta_image_2023.pickle
+  test_list: Test_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  time_channel_coupling_enable: false
+  train_list: Train_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  use_cols_csv_label:
+  - Datetime
+  - I
+  - Iclr
+  use_cols_pickle_image:
+  - Datetime
+  - h5img
+  valid_list: Valid_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+Data_mode: SIRTA16x15
+ImageSequence:
+  image_channels: 3
+  image_resize: 64
+  image_size: 64
+  pred_length: 8
+  seq_length: 8
+Main_logging_path: results
+Network_name: Xiong
+Note: null
+Regressor:
+  ckpt_path: weights/frozen_regressor.pth
+  drop_rate: 0.001
+  gpu_id: 0
+  image_channels: 3
+  image_resize: 64
+  image_size: 256
+  is_masking: false
+  is_train: false
+  log_folder: logs
+  loss: MAE
+  network: Unet
+  num_filters: 15
+  predict_length: 15
+  seq_length: 16
+  stats_path: logs
+  temp_res: -1
+Training:
+  Number of parameters: 15946468
+  batch_size: 48
+  epoch_start: 0
+  epochs: 120
+  eval_every: 1
+  gpu_id: 0
+  is_train: false
+  patience: 20
+  random_seed: 1
+  resume_optimizer: true
+  subsampling_enable: false
+  subsampling_rate: 0.25
+  test_batch_size: 4
+  valid_batch_size: 8
+  xiong_stage: multimodal
+Xiong:
+  GP:
+    add_observation_noise: true
+    kernel_scale: 2.0
+    n_rff: 1024
+    ridge: 0.001
+  Learning:
+    multimodal:
+      amp: true
+      grad_clip: 1.0
+      learning_betas:
+      - 0.9
+      - 0.999
+      learning_rate: 0.0003
+      weight_decay: 0.0001
+    resnet:
+      amp: true
+      grad_clip: 1.0
+      learning_betas:
+      - 0.9
+      - 0.999
+      learning_rate: 0.0002
+      weight_decay: 0.0
+    video:
+      amp: true
+      grad_clip: 1.0
+      learning_betas:
+      - 0.9
+      - 0.999
+      learning_rate: 0.0001
+      weight_decay: 0.0
+  Multimodal:
+    d_ff: 256
+    d_layers: 1
+    d_model: 128
+    dropout: 0.1
+    e_layers: 2
+    label_len: 4
+    n_heads: 4
+    spectral_c: 6.0
+    use_spectral_norm: true
+  Network:
+    eval_ddim_steps: 20
+    eval_max_batches: 80
+    eval_sample_batches: 2
+    forecast_ddim_steps: 50
+    gp_precision_batches: null
+    iclr_idx: 3
+    max_image_dumps: 8
+    n_ensemble: 10
+    n_mixture_draws: 100
+    subset_indices: ../splits/sirta_2023/test_subset_indices.npy
+    subset_size: 2000
+    temporal_idx:
+    - 0
+    - 1
+    - 2
+    warmstart_ckpt_path: null
+  Resnet:
+    aug_blur_sigma_max: 0.6
+    aug_noise_std: 0.0
+    base: 64
+    feat_dim: 512
+    layers:
+    - 2
+    - 2
+    - 2
+    - 2
+    spectral_c: 6.0
+    use_spectral_norm: true
+  Target:
+    csi_clip: 1.67
+    csi_mean: 0.7256
+    csi_std: 0.3822
+    ghi_mean: 0.0
+    ghi_std: 1.0
+    iclr_floor: 1.0
+    mode: csi
+  Video:
+    attn_res:
+    - 16
+    beta_schedule: linear
+    ddim_eta: 0.0
+    ddim_steps: 50
+    dropout: 0.0
+    emb_dim: 256
+    enc_base: 32
+    motion_ch: 64
+    motion_spatial: true
+    num_train_timesteps: 1000
+    sde_dt: 1.0
+    sde_hidden: 128
+    sde_noise_scale: 1.0
+    sde_substeps: 1
+    unet_base: 64
+    unet_ch_mult:
+    - 1
+    - 2
+    - 2
+ckpt_path: results/Xiong-MULTIMODAL_B48lr3p0E-04-Dm128-Hd4-El2-Dl1-RFF1024-CSI/D28M07Y26_H14M44/checkpoints
+load_ckpt: true
+logging_path: results/Xiong-MULTIMODAL_B48lr3p0E-04-Dm128-Hd4-El2-Dl1-RFF1024-CSI
+logging_version_path: results/Xiong-MULTIMODAL_B48lr3p0E-04-Dm128-Hd4-El2-Dl1-RFF1024-CSI/D28M07Y26_H14M44
+setting_path: results/Xiong-MULTIMODAL_B48lr3p0E-04-Dm128-Hd4-El2-Dl1-RFF1024-CSI/D28M07Y26_H14M44/stats/settings-D28M07Y26_H14M44.txt
+setting_yaml: results/Xiong-MULTIMODAL_B48lr3p0E-04-Dm128-Hd4-El2-Dl1-RFF1024-CSI/D28M07Y26_H14M44/stats/settings-D28M07Y26_H14M44.yaml
+stats_path: results/Xiong-MULTIMODAL_B48lr3p0E-04-Dm128-Hd4-El2-Dl1-RFF1024-CSI/D28M07Y26_H14M44/stats
+version: D28M07Y26_H14M44

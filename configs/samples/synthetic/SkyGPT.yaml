@@ -1,0 +1,111 @@
+Data:
+  csv_label: synthetic_data_2023.csv
+  data_folder: samples/synthetic_2023
+  pickle_image: synthetic_image_2023.pickle
+  test_list: Test_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  time_channel_coupling_enable: false
+  train_list: Train_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  use_cols_csv_label:
+  - Datetime
+  - I
+  - Iclr
+  use_cols_pickle_image:
+  - Datetime
+  - h5img
+  valid_list: Valid_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+Data_mode: SIRTA16x15
+ImageSequence:
+  image_channels: 3
+  image_resize: 64
+  image_size: 64
+  pred_length: 8
+  seq_length: 8
+Main_logging_path: outputs
+Network_name: Skygpt
+Regressor:
+  ckpt_path: weights/frozen_regressor.pth
+  drop_rate: 0.001
+  gpu_id: 0
+  image_channels: 3
+  image_resize: 64
+  image_size: 256
+  is_masking: false
+  is_train: false
+  log_folder: logs
+  loss: MAE
+  network: Unet
+  num_filters: 15
+  predict_length: 15
+  seq_length: 16
+  stats_path: logs
+  temp_res: -1
+Skygpt:
+  Learning:
+    learning_betas: (0.9, 0.999)
+    learning_rate: 3e-4
+  Network:
+    attn_dropout: 0.3
+    attn_type: full
+    class_cond: false
+    class_cond_dim: null
+    dropout: 0.2
+    heads: 4
+    hidden_dim: 576
+    iclr_idx: 3
+    kernel_size: 7
+    layers: 8
+    n_cond_frames: 4
+    n_ensemble: 10
+    normal_std: 0.02
+    precision: 32
+    resnet34_sample: (1, 4, 4)
+    subset_indices: ../samples/synthetic_2023/test_subset_indices.npy
+    subset_size: 2000
+    vaque_ckp_path: Skygpt-VQVAE_B64lr1p0E-04_nC2048-RL6-Em192-Hd192-DS-4-4-4_Rec1p7E+01-Com2p5E-01/D09M08Y26_H23M34/checkpoints
+  Note: null
+  load_ckpt: true
+  logging_path: null
+  version: D10M08Y26_H11M21
+Training:
+  Number of parameters: 76060499
+  batch_size: 32
+  epoch_start: 0
+  epochs: 400
+  eval_every: 1
+  gpu_id: 0
+  is_train: false
+  patience: 10
+  random_seed: false
+  resume_optimizer: true
+  subsampling_enable: false
+  subsampling_rate: 0.8
+  test_batch_size: 32
+  train_only_VQVAE: false
+  valid_batch_size: 32
+VQVAE:
+  Learning:
+    beta_commitment: 0.25
+    beta_reconstruction: 16.6667
+    ema_decay: 0.99
+    learning_betas: (0.9, 0.999)
+    learning_rate: 1e-4
+    restart_threshold: 1.0
+  Network:
+    downsample: (4, 4, 4)
+    embedding_dim: 192
+    image_channels: 3
+    n_codes: 2048
+    n_hiddens: 192
+    n_res_layers: 6
+    pred_length: 8
+    resolution: 64
+    seq_length: 12
+  Note: null
+  load_ckpt: false
+  version: D09M08Y26_H23M34
+ckpt_path: results/Skygpt_B32lr3p0E-04-n-cond-4-TRNS-Skygpt-VQVAE_B64lr1p0E-04_nC2048-RL6-Em192-Hd192-DS-4-4-4_Rec1p7E+01-Com2p5E-01/D10M08Y26_H11M21/checkpoints
+logging_path: results/Skygpt_B32lr3p0E-04-n-cond-4-TRNS-Skygpt-VQVAE_B64lr1p0E-04_nC2048-RL6-Em192-Hd192-DS-4-4-4_Rec1p7E+01-Com2p5E-01
+logging_version_path: results/Skygpt_B32lr3p0E-04-n-cond-4-TRNS-Skygpt-VQVAE_B64lr1p0E-04_nC2048-RL6-Em192-Hd192-DS-4-4-4_Rec1p7E+01-Com2p5E-01/D10M08Y26_H11M21
+setting_path: results/Skygpt_B32lr3p0E-04-n-cond-4-TRNS-Skygpt-VQVAE_B64lr1p0E-04_nC2048-RL6-Em192-Hd192-DS-4-4-4_Rec1p7E+01-Com2p5E-01/D10M08Y26_H11M21/stats/settings-D10M08Y26_H11M21.txt
+setting_yaml: results/Skygpt_B32lr3p0E-04-n-cond-4-TRNS-Skygpt-VQVAE_B64lr1p0E-04_nC2048-RL6-Em192-Hd192-DS-4-4-4_Rec1p7E+01-Com2p5E-01/D10M08Y26_H11M21/stats/settings-D10M08Y26_H11M21.yaml
+stats_path: results/Skygpt_B32lr3p0E-04-n-cond-4-TRNS-Skygpt-VQVAE_B64lr1p0E-04_nC2048-RL6-Em192-Hd192-DS-4-4-4_Rec1p7E+01-Com2p5E-01/D10M08Y26_H11M21/stats

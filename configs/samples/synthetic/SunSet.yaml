@@ -1,0 +1,64 @@
+Data:
+  csv_label: synthetic_data_2023.csv
+  data_folder: samples/synthetic_2023
+  pickle_image: synthetic_image_2023.pickle
+  test_list: Test_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  time_channel_coupling_enable: true
+  train_list: Train_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  use_cols_csv_label:
+  - Datetime
+  - I
+  - Iclr
+  use_cols_pickle_image:
+  - Datetime
+  - h5img
+  valid_list: Valid_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+Data_mode: SIRTA16x15
+ImageSequence:
+  image_channels: 3
+  image_resize: 64
+  image_size: 64
+  pred_length: 8
+  seq_length: 8
+Main_logging_path: outputs
+Network_name: Sunset
+Note: CorrectedProtocol
+Sunset:
+  Eval:
+    n_ensemble_tile: 100
+    subset_indices: ../samples/synthetic_2023/test_subset_indices.npy
+  Learning:
+    learning_betas:
+    - 0.9
+    - 0.999
+    learning_rate: 0.001
+  Network:
+    dense_size: 1024
+    drop_rate: 0.4
+    iclr_idx: 3
+    include_future_iclr: true
+    kernel_size: 3
+    num_filters: 24
+    pool_size: 2
+Training:
+  Number of parameters: 13665768
+  batch_size: 64
+  epochs: 100
+  eval_every: 1
+  gpu_id: 0
+  is_train: false
+  patience: 4
+  random_seed: 1
+  resume_optimizer: true
+  subsampling_enable: false
+  subsampling_rate: 1.0
+  test_batch_size: 64
+  valid_batch_size: 64
+ckpt_path: results/Sunset_B64lr1p0E-03-wIclr/D12M08Y26_H21M57_CorrectedProtocol/checkpoints
+load_ckpt: true
+logging_path: results/Sunset_B64lr1p0E-03-wIclr
+logging_version_path: results/Sunset_B64lr1p0E-03-wIclr/D12M08Y26_H21M57_CorrectedProtocol
+setting_path: results/Sunset_B64lr1p0E-03-wIclr/D12M08Y26_H21M57_CorrectedProtocol/stats/settings-D12M08Y26_H21M57_CorrectedProtocol.txt
+setting_yaml: results/Sunset_B64lr1p0E-03-wIclr/D12M08Y26_H21M57_CorrectedProtocol/stats/settings-D12M08Y26_H21M57_CorrectedProtocol.yaml
+stats_path: results/Sunset_B64lr1p0E-03-wIclr/D12M08Y26_H21M57_CorrectedProtocol/stats
+version: D12M08Y26_H21M57_CorrectedProtocol

@@ -1,0 +1,16 @@
+file	method	table2_label	keys	shapes	dtypes	seeded
+propFuture.npz	propFuture	Text2Image-x0hat	S	[1998, 10, 8]	float32	partial
+propPast.npz	propPast	Text2Image-clean	S	[1998, 10, 8]	float32	partial
+Xiong.npz	Xiong	Xiong	S;mu_d	[1998, 100, 8];[1998, 8]	float32;float64	partial
+SkyGPT.npz	SkyGPT	SkyGPT	ens_ghi	[1998, 10, 8]	float32	false
+SunSet.npz	SunSet	Sunset (wIclr)	S	[1998, 100, 8]	float32	true
+DLinearIclr.npz	DLinearIclr	DLinear (wIclr)	S	[1998, 100, 8]	float32	true
+PatchTSTIclr.npz	PatchTSTIclr	PatchTST (wIclr)	S	[1998, 100, 8]	float32	true
+TimeXerIclr.npz	TimeXerIclr	TimeXer (wIclr)	S	[1998, 100, 8]	float32	true
+DLinearNoIclr.npz	DLinearNoIclr	DLinear (noIclr)	S	[1998, 100, 8]	float32	true
+PatchTSTNoIclr.npz	PatchTSTNoIclr	PatchTST (noIclr)	S	[1998, 100, 8]	float32	true
+TimeXerNoIclr.npz	TimeXerNoIclr	TimeXer (noIclr)	S	[1998, 100, 8]	float32	true
+SunSetNoIclr.npz	SunSetNoIclr	Sunset (noIclr)	S	[1998, 100, 8]	float32	true
+ConvLSTM.npz	ConvLSTM	ConvLSTM	S	[1998, 100, 8]	float32	true
+PhyDNetGAN.npz	PhyDNetGAN	PhyDNetGAN	S	[1998, 100, 8]	float32	true
+PhyDNet.npz	PhyDNet	PhyDNet	S	[1998, 100, 8]	float32	true

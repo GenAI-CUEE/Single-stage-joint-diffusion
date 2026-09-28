@@ -1,0 +1,83 @@
+Data:
+  csv_label: synthetic_data_2023.csv
+  data_folder: samples/synthetic_2023
+  pickle_image: synthetic_image_2023.pickle
+  test_list: Test_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  time_channel_coupling_enable: false
+  train_list: Train_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  use_cols_csv_label:
+  - Datetime
+  - I
+  - Iclr
+  use_cols_pickle_image:
+  - Datetime
+  - h5img
+  valid_list: Valid_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+Data_mode: SIRTA16x15
+Eval:
+  iclr_idx: 3
+  n_ensemble_tile: 100
+  subset_indices: ../samples/synthetic_2023/test_subset_indices.npy
+ImageSequence:
+  image_channels: 3
+  image_resize: 64
+  image_size: 64
+  pred_length: 8
+  seq_length: 8
+Learning:
+  beta_generative: 5.0
+  beta_regularization: 0.00111
+  learning_rate: 0.001
+Main_logging_path: outputs
+Network:
+  ConvLSTM_hidden_channels:
+  - 128
+  - 128
+  - 64
+  PhyCell_hidden_channels:
+  - 49
+  PhyCell_kernel_size: (7,7)
+  hidden_dim: 64
+  image_channels: 3
+  kernel_size: (3, 3)
+Network_name: PhyDNet
+Note: null
+Regressor:
+  ckpt_path: weights/frozen_regressor.pth
+  drop_rate: 0.001
+  gpu_id: 0
+  image_channels: 3
+  image_resize: 64
+  image_size: 256
+  is_masking: false
+  is_train: false
+  log_folder: logs
+  loss: MAE
+  network: Unet
+  num_filters: 15
+  predict_length: 15
+  seq_length: 16
+  stats_path: logs
+  temp_res: -1
+Training:
+  Number of parameters: 3119222
+  batch_size: 16
+  epoch_start: 0
+  epochs: 40
+  eval_every: 1
+  gpu_id: 0
+  is_train: false
+  patience: 10
+  random_seed: false
+  subsampling_enable: false
+  subsampling_rate: 0.8
+  test_batch_size: 16
+  valid_batch_size: 8
+ckpt_path: results/PhyDNet_B16_lr1p0E-03_LOSS-Gen5p0E+00-Rg1p1E-03/D31M07Y26_H19M10/checkpoints
+load_ckpt: true
+logging_path: results/PhyDNet_B16_lr1p0E-03_LOSS-Gen5p0E+00-Rg1p1E-03
+logging_version_path: results/PhyDNet_B16_lr1p0E-03_LOSS-Gen5p0E+00-Rg1p1E-03/D31M07Y26_H19M10
+setting_path: results/PhyDNet_B16_lr1p0E-03_LOSS-Gen5p0E+00-Rg1p1E-03/D31M07Y26_H19M10/stats/settings-D31M07Y26_H19M10.txt
+setting_yaml: results/PhyDNet_B16_lr1p0E-03_LOSS-Gen5p0E+00-Rg1p1E-03/D31M07Y26_H19M10/stats/settings-D31M07Y26_H19M10.yaml
+stats_path: results/PhyDNet_B16_lr1p0E-03_LOSS-Gen5p0E+00-Rg1p1E-03/D31M07Y26_H19M10/stats
+version: D31M07Y26_H19M10

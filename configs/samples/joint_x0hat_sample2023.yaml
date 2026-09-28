@@ -1,0 +1,103 @@
+Data:
+  csv_label: sirta_data_2023.csv
+  data_folder: samples/sirta_2023
+  pickle_image: sirta_image_2023.pickle
+  test_list: Test_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  time_channel_coupling_enable: false
+  train_list: Train_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+  use_cols_csv_label:
+  - Datetime
+  - I
+  - Iclr
+  use_cols_pickle_image:
+  - Datetime
+  - h5img
+  valid_list: Valid_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt
+Data_mode: SIRTA16x15
+ImageSequence:
+  image_channels: 3
+  image_resize: 64
+  image_size: 64
+  pred_length: 8
+  seq_length: 8
+Main_logging_path: outputs
+Network_name: Text2ImageJoint
+Regressor:
+  ckpt_path: weights/frozen_regressor.pth
+  drop_rate: 0.001
+  gpu_id: 0
+  image_channels: 3
+  image_resize: 64
+  image_size: 256
+  is_masking: false
+  is_train: false
+  log_folder: logs
+  loss: MAE
+  network: Unet
+  num_filters: 15
+  predict_length: 15
+  seq_length: 16
+  stats_path: logs
+  temp_res: -1
+Text2ImageJoint:
+  Learning:
+    adam_beta1: 0.9
+    adam_beta2: 0.999
+    adam_epsilon: 1.0e-08
+    adam_weight_decay: 0.01
+    amp: true
+    grad_clip: 1.0
+    learning_rate: 1.0e-06
+  Network:
+    coupling: aligned
+    csi_clip: 1.67
+    csi_condition: false
+    csi_condition_mode: 'off'
+    csi_mean: 0.7256
+    csi_std: 0.3822
+    eval_sample_batches: 2
+    freeze_image_side: false
+    iclr_floor: 1.0
+    image_tokenizer:
+      latent_channel: 4
+      n_img_tokens: 16
+    in_latent_channel: 4
+    is_text_format: false
+    lambda_scalar: 1.0
+    max_image_dumps: 8
+    n_ensemble: 10
+    n_ensemble_seed_base: 10000
+    num_inference_steps: 50
+    pretrained_ckpt_dir: Text2ImageJoint-X0HAT_pretrained/seed1/checkpoints
+    pretrained_ckpt_file: context_joint-0959.pth
+    pretrained_model: stable-diffusion-v1-5/stable-diffusion-v1-5
+    scalar_denoiser:
+      scalar_depth: 4
+      scalar_heads: 4
+      scalar_hidden_dim: 256
+    scalar_image_source: x0hat
+    subset_indices: ../samples/sirta_2023/test_subset_indices.npy
+    subset_size: 2000
+    unet_encoder_hid_dim: 4
+Training:
+  Number of parameters: 198834269
+  epochs: 60
+  eval_every: 2
+  gpu_id: 0
+  is_train: false
+  patience: 10
+  random_seed: 1
+  resume_optimizer: false
+  subsampling_enable: false
+  subsampling_rate: 1.0
+  test_batch_size: 4
+  train_batch_size: 4
+  valid_batch_size: 4
+ckpt_path: results/Text2ImageJoint-X0HAT_B4lr1p0E-06/D10M08Y26_H20M50/checkpoints
+load_ckpt: false
+logging_path: results/Text2ImageJoint-X0HAT_B4lr1p0E-06
+logging_version_path: results/Text2ImageJoint-X0HAT_B4lr1p0E-06/D10M08Y26_H20M50
+setting_path: results/Text2ImageJoint-X0HAT_B4lr1p0E-06/D10M08Y26_H20M50/stats/settings-D10M08Y26_H20M50.txt
+setting_yaml: results/Text2ImageJoint-X0HAT_B4lr1p0E-06/D10M08Y26_H20M50/stats/settings-D10M08Y26_H20M50.yaml
+stats_path: results/Text2ImageJoint-X0HAT_B4lr1p0E-06/D10M08Y26_H20M50/stats
+version: D10M08Y26_H20M50

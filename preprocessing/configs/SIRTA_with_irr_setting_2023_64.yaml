@@ -1,0 +1,22 @@
+image_dir : "SIRTA_skyimages_unzip/2023"  
+image_resize : 64 
+TimeRes : 2
+seq_length : 8
+predict_length : 8
+start_date : [2023,  1, 1] 
+stop_date :  [2023, 12, 31] 
+start_hour: [5, 00] 
+end_hour:   [22, 00] 
+percent_training: 0.80
+percent_valid:    0.10
+percent_testing:  0.10 
+is_h5seq: False 
+image_timezone: "UTC"
+localize: "Europe/Paris"
+start_collecting_images: True
+irradiance_csv_folder:     "SIRTA_irradiance_solys2_ICPH-daytime"
+irradiance_csv_ihp_folder: "SIRTA_irradiance_solys2_ICPH-daytime"
+irradiance_csv_file:   "2023-cleaned_sky-cond.csv" # Note_run_date: '2024-03-18'
+output_path_image_and_datetime: "sirta_2023_image64-localtime_ICHP-daytime-dhi"
+pickle_data: "sirta_image_2023.pickle"
+csv_data:  "sirta_data_2023.csv"

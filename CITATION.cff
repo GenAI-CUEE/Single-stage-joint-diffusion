@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below. For the paper it accompanies, see preferred-citation."
+title: "Single-stage joint diffusion of sky images and clear-sky index for ultra-short-term irradiance forecasting: what the frame-to-irradiance stage discards"
+type: software
+authors:
+  - family-names: "Suwandee"
+    given-names: "Kanawut"
+  - family-names: "Suwanwimolkul"
+    given-names: "Suwichaya"
+repository-code: "https://github.com/GenAI-CUEE/Single-stage-joint-diffusion"
+license: Apache-2.0
+preferred-citation:
+  type: generic
+  title: "Single-stage joint diffusion of sky images and clear-sky index for ultra-short-term irradiance forecasting: what the frame-to-irradiance stage discards"
+  authors:
+    - family-names: "Suwandee"
+      given-names: "Kanawut"
+    - family-names: "Suwanwimolkul"
+      given-names: "Suwichaya"
+  year: 2026
+  doi: "10.13140/RG.2.2.15826.93129"
