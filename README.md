@@ -3,7 +3,7 @@
 Code, trained weights and stored forecasts for:
 
 > K. Suwandee and S. Suwanwimolkul. *Single-stage joint diffusion of sky images and clear-sky index for ultra-short-term irradiance forecasting: what the frame-to-irradiance stage discards.* Submitted to Applied Energy, 2026.
-> https://doi.org/10.13140/RG.2.2.15826.93129 (ResearchGate)
+> https://www.researchgate.net/publication/414963178 (ResearchGate)
 
 The model forecasts the next sixteen minutes of sky images and clear-sky index together, in one diffusion
 process, from eight past sky images and no measured irradiance at the input. This repository reproduces the
@@ -167,7 +167,7 @@ This produces the same forecasts as the `run_config.py` command above, in `outpu
 
 ## Citation
 
-The paper is available as a preprint: https://doi.org/10.13140/RG.2.2.15826.93129
+The paper is available as a preprint: https://www.researchgate.net/publication/414963178
 
 ```bibtex
 @misc{suwandee2026singlestage,
@@ -177,7 +177,7 @@ The paper is available as a preprint: https://doi.org/10.13140/RG.2.2.15826.9312
                   stage discards},
   year         = {2026},
   howpublished = {Preprint, ResearchGate},
-  doi          = {10.13140/RG.2.2.15826.93129}
+  url          = {https://www.researchgate.net/publication/414963178}
 }
 ```
 
