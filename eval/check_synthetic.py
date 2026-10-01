@@ -306,6 +306,9 @@ def main():
         n_close += level == "CLOSE"
         n_fail += level == "FAIL"
         print("%-16s%-8s%s" % (name, level, "; ".join(details)))
+        if level == "FAIL" and name in ("propFuture", "propPast"):
+            print("  note: the proposed arms match the reference only on a GPU; on CPU they draw a "
+                  "different ensemble (see README).")
 
     spm_level, spm_details = compare({"rmse": spm["rmse"], "fs": None, "crps": spm["crps"], "crpss": None},
                                       expected["SPM"])

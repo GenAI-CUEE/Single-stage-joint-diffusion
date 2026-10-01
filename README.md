@@ -68,6 +68,11 @@ This runs every method and compares the result with `prediction_samples/expected
 expected on hardware and software like ours, CLOSE on others -- both mean the method runs correctly. A
 consistency check only, not a measure of performance; see the table in `samples/synthetic_2023/README.md`.
 
+The code also runs on CPU-only machines, slowly. On CPU, the baselines and SkyGPT reproduce the synthetic
+sample's expected values. The two proposed arms run but draw a different ensemble from the GPU reference,
+because their noise comes from the device's random-number generator, which differs between CPU and CUDA. To
+reproduce the reported numbers, use a GPU.
+
 **Approach 2. Run with `main.py`.** For readers new to the code, the same run can be made directly instead.
 `run_config.py` stages the checkpoint automatically; `main.py` does not, so do that once first:
 ```
