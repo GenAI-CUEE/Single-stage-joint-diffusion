@@ -196,7 +196,7 @@ class process:
             generator_name =  weights_list[-1] 
             self._custom_print(colored("Load state dict: [%s]" % generator_name, "cyan")) 
              
-            checkpoint = torch.load(generator_name, weights_only=False)
+            checkpoint = torch.load(generator_name, map_location="cpu", weights_only=False)
              
             if load_option == "skygpt-vae_checkpoint" :
                 module.model.vqvae.load_state_dict(checkpoint['vqvae_state_dict'])   
@@ -209,12 +209,12 @@ class process:
                 module.model.load_state_dict(checkpoint['state_dict'])
             
             if hasattr(module, 'discriminator'):
-                module.discriminator.load_state_dict(torch.load(generator_name, weights_only=False)['disc_state_dict'])
+                module.discriminator.load_state_dict(torch.load(generator_name, map_location="cpu", weights_only=False)['disc_state_dict'])
 
             if self.config["Training"]["is_train"]:
                 if (load_option == "skygpt-vae_checkpoint") and (self.config["Training"]["train_only_VQVAE"] == True):
                     if self.config["Training"]["resume_optimizer"]:   
-                        module.optimizer.load_state_dict(torch.load(generator_name, weights_only=False)['optimizer'])
+                        module.optimizer.load_state_dict(torch.load(generator_name, map_location="cpu", weights_only=False)['optimizer'])
                         print(colored("Loaded Learning rate = [%f]" % module.optimizer.param_groups[-1]['lr'], "cyan"))
                     else:
                         print(colored("<<NO OPTIMIZER LOAD>> ", "green"))
@@ -225,7 +225,7 @@ class process:
                 elif (load_option == "skygpt-transformer_checkpoint") and (self.config["Training"]["train_only_VQVAE"] == False):
                     
                     if self.config["Training"]["resume_optimizer"]:   
-                        module.optimizer.load_state_dict(torch.load(generator_name, weights_only=False)['optimizer'])
+                        module.optimizer.load_state_dict(torch.load(generator_name, map_location="cpu", weights_only=False)['optimizer'])
                         print(colored("Loaded Learning rate = [%f]" % module.optimizer.param_groups[-1]['lr'], "cyan"))
                     else:
                         print(colored("<<NO OPTIMIZER LOAD>> ", "green"))
@@ -238,7 +238,7 @@ class process:
                     if self.config["Training"]["resume_optimizer"]:
                         try:
                             module.optimizer.load_state_dict(
-                                torch.load(generator_name, weights_only=False)['optimizer'])
+                                torch.load(generator_name, map_location="cpu", weights_only=False)['optimizer'])
                             print(colored("Loaded Learning rate = [%f]"
                                           % module.optimizer.param_groups[-1]['lr'], "cyan"))
                         except (KeyError, ValueError) as e:
@@ -251,13 +251,13 @@ class process:
                 else: 
                     print(colored("<<Debug VQVAE>> NO OPTIMIZER LOAD", "green"))
                 
-                epoch_start = torch.load(generator_name, weights_only=False)['epoch'] 
-                self._custom_print(colored("[Reload epoch: %05d]" % epoch_start, "cyan"))   
+                epoch_start = torch.load(generator_name, map_location="cpu", weights_only=False)['epoch']
+                self._custom_print(colored("[Reload epoch: %05d]" % epoch_start, "cyan"))
                 epoch_start = epoch_start + 1
 
             else:
                 print('Infer mode: loaded %s model from %s' %  (self.config["Network_name"], generator_name))
-                epoch_start = torch.load(generator_name, weights_only=False)['epoch']
+                epoch_start = torch.load(generator_name, map_location="cpu", weights_only=False)['epoch']
 
         else:
             if self.config["Training"]["is_train"]:

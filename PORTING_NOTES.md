@@ -163,21 +163,42 @@ recorded so nobody has to rediscover it.
   one Table 2 method that cannot run on the synthetic set (see `samples/synthetic_2023/README.md`).
 - **Verified for inference only.** The proposed model's `train()` and `evaluation()` ship complete but
   have not been exercised in this repository.
-- **Importing this codebase no longer requires a GPU; running it still does.** `losses/Sunset/losses.py`
-  used to call `torch.cuda.current_device()` unconditionally at import time (before its own later
-  `torch.cuda.is_available()` guard ever ran), which crashed the whole import chain -- every method, not
-  only SUNSET, since `main.py` imports every model unconditionally -- the instant no CUDA device was
-  visible. Fixed: that call is now itself guarded the same way `losses/ConvLSTM/losses.py` already guarded
-  its equivalent line. `import models.Sunset` and importing `eval/run_config.py`'s module chain both now
-  succeed with `CUDA_VISIBLE_DEVICES=""`. Actually running a method still fails on a CPU-only machine, for
-  an unrelated reason: `main.py`'s `_get_previous_training()` loads the released checkpoints with
-  `torch.load(generator_name, weights_only=False)` (`main.py:199`, and three more call sites at
-  `main.py:212,217,228`) with no `map_location`, so PyTorch tries to deserialize the GPU-trained checkpoint
-  straight onto a CUDA device and raises `RuntimeError: Attempting to deserialize object on a CUDA device
-  but torch.cuda.is_available() is False`. Confirmed directly: every one of 11 methods tried on CPU
-  (everything except SkyGPT and the proposed model's two arms, which are too slow on CPU to try) failed
-  with this exact error, in every case before any inference ran. Not fixed here -- it is a different call,
-  inside a function rather than at import time, and outside what fixed the import chain.
+- **Importing this codebase no longer requires a GPU; loading checkpoints no longer does either.**
+  `losses/Sunset/losses.py` used to call `torch.cuda.current_device()` unconditionally at import time
+  (before its own later `torch.cuda.is_available()` guard ever ran), which crashed the whole import chain --
+  every method, not only SUNSET, since `main.py` imports every model unconditionally -- the instant no CUDA
+  device was visible. Fixed: that call is now itself guarded the same way `losses/ConvLSTM/losses.py`
+  already guarded its equivalent line. `import models.Sunset` and importing `eval/run_config.py`'s module
+  chain both now succeed with `CUDA_VISIBLE_DEVICES=""`.
+
+  Actually running a method used to fail regardless, for an unrelated reason: `main.py`'s
+  `_get_previous_training()` loaded the released checkpoints with `torch.load(generator_name,
+  weights_only=False)` and no `map_location`, so PyTorch tried to deserialize the GPU-trained checkpoint
+  straight onto a CUDA device and raised `RuntimeError: Attempting to deserialize object on a CUDA device
+  but torch.cuda.is_available() is False`. **Fixed**: every reachable `torch.load` on the checkpoint-loading
+  path (`main.py:199,212,217,228,241,254,260`; the frozen-regressor loader shared by `models/ConvLSTM.py`,
+  `models/PhyDNet.py`, `models/PhyDNetGAN.py` and `models/SkyGPT.py`) now passes `map_location="cpu"`. Every
+  one of these results is either consumed by `load_state_dict` (which re-places tensors onto the receiving
+  module's own parameters, on whatever device they already live on -- so this cannot change a GPU run's
+  result) or, at `main.py:254`/`260`, is a plain Python `epoch` int with no device concept at all. Several
+  other `torch.load` call sites already passed a correct `map_location` and needed no change
+  (`models/Xiong.py:117,200,730`, `models/Text2ImageJoint.py:220`,
+  `models/Text2ImageJoint_utils/checkpoint_io.py:48`); `models/SkyGPT_utils/vqvae.py:106`
+  (`load_from_checkpoint`) still has none, but is unreachable -- never called anywhere in this repository.
+  Verified bit-for-bit unchanged on the GPU path (183/183 Table 2 cells, the proposed model's two arms
+  `np.array_equal` against their `results/` reference on the full 1998-window set, and the synthetic sample
+  set matching `expected_synthetic.csv`'s central values exactly) before being trusted.
+
+  **Remaining CPU gap (not `torch.load`): the proposed model's two arms run, but outside tolerance.** On
+  the synthetic set, 12 deterministic methods and SkyGPT (whose ensemble is already unseeded by design) all
+  score CLOSE on CPU. `propFuture`/`propPast` run to completion but land well outside their tolerance (worst
+  cell off by about 89x its tolerance for `propFuture`, 13x for `propPast`) -- not a precision shortfall but
+  a genuinely different random draw. `models/Text2ImageJoint.py:138-139` seeds once per ensemble member with
+  `torch.manual_seed`/`torch.cuda.manual_seed_all`, then `torch.randn_like(...)` (`models/Text2ImageJoint.py:374,378`)
+  draws from whichever default generator the tensor's own device uses; PyTorch's CPU and CUDA default RNGs
+  are different algorithms, so the same integer seed produces different numbers on each, and 50 diffusion
+  steps compound the difference. Not fixed here (would mean changing how the ensemble is seeded, not just
+  adding a `map_location`); tolerances were not loosened to paper over it.
 - **Unreachable files retained:** `models/SkyGPT_utils/data.py` and `vgg.py`, kept so the upstream
   module stays whole.
 - **`--force` in regenerate mode** is tested on SUNSET only. It works by switching off `load_ckpt` so a

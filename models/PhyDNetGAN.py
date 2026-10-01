@@ -143,7 +143,7 @@ class Model(nn.Module):
             if "Regressor" in configs:
                 self.regressor = Unet_regressor(configs["Regressor"])
                 self.regressor.model.load_state_dict(
-                    torch.load(configs["Regressor"]["ckpt_path"], weights_only=False)['state_dict'])
+                    torch.load(configs["Regressor"]["ckpt_path"], map_location="cpu", weights_only=False)['state_dict'])
                 self.regressor.model.eval()
 
     def forward(self, input_image, y_target=None, teacher_forcing_ratio=0.0, encoder_sampling_ratio=1.0):

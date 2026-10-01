@@ -59,7 +59,7 @@ class Model(nn.Module):
         
         configs["Regressor"]["image_resize"] = configs["ImageSequence"]["image_resize"]
         self.regressor = Unet_regressor(configs["Regressor"]) 
-        self.regressor.model.load_state_dict(torch.load(configs["Regressor"]["ckpt_path"], weights_only=False)['state_dict'])
+        self.regressor.model.load_state_dict(torch.load(configs["Regressor"]["ckpt_path"], map_location="cpu", weights_only=False)['state_dict'])
         self.regressor.model.eval()
         # dir(self.model)
         # self.model.vqvae
