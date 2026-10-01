@@ -177,7 +177,8 @@ The paper is available as a preprint: https://www.researchgate.net/publication/4
                   stage discards},
   year         = {2026},
   howpublished = {Preprint, ResearchGate},
-  url          = {https://www.researchgate.net/publication/414963178}
+  url          = {https://www.researchgate.net/publication/414963178},
+  note         = {Submitted to Applied Energy}
 }
 ```
 
