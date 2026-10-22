@@ -2,7 +2,7 @@
 
 Code, trained weights and stored forecasts for:
 
-> K. Suwandee and S. Suwanwimolkul. *Single-stage joint diffusion of sky images and clear-sky index for ultra-short-term irradiance forecasting: what the frame-to-irradiance stage discards.* Submitted to Applied Energy, 2026.
+> K. Suwandee and S. Suwanwimolkul. *Single-stage joint diffusion of sky images and clear-sky index for ultra-short-term irradiance forecasting: what the frame-to-irradiance stage discards.* Submitted to Elsevier, 2026.
 > https://www.researchgate.net/publication/414963178 (ResearchGate)
 
 The model forecasts the next sixteen minutes of sky images and clear-sky index together, in one diffusion
@@ -183,7 +183,7 @@ The paper is available as a preprint: https://www.researchgate.net/publication/4
   year         = {2026},
   howpublished = {Preprint, ResearchGate},
   url          = {https://www.researchgate.net/publication/414963178},
-  note         = {Submitted to Applied Energy}
+  note         = {Submitted to Elsevier}
 }
 ```
 
