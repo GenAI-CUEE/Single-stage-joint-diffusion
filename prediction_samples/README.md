@@ -1,6 +1,6 @@
 # prediction_samples
 
-The forecasts behind the paper's comparison table (Table 2), one file per method, so the table can be
+The forecasts behind the paper's comparison table (Table 1), one file per method, so the table can be
 reproduced exactly by scoring them against your own copy of the SIRTA data.
 
 ## Download
@@ -14,7 +14,7 @@ Put them in `prediction_samples/predictions_db/`. Verify them against `CHECKSUMS
 cd prediction_samples/predictions_db && sha256sum -c ../CHECKSUMS.tsv
 ```
 
-## Reproduce Table 2
+## Reproduce Table 1
 
 ```
 python eval/reproduce_comparison.py                        # stored mode (default)
@@ -55,7 +55,7 @@ Use the split lists in `splits/sirta_2023/` rather than regenerating the split; 
 | `target_time` | (1998, 8) | times of the eight forecast frames |
 | `test_id` | (1998,) | the sample's key in `Test_Tr0p80-Val0p10-Test0p10-Frame-2x8-to-2x8.txt` (its first target time) |
 | `test_index` | (1998,) | the line of that key in the same file, 0-based |
-| `meta` | JSON string | method, Table 2 label, units, member count, sampling steps, `seeded`, checkpoint and source-file SHA-256 |
+| `meta` | JSON string | method, Table 1 label, units, member count, sampling steps, `seeded`, checkpoint and source-file SHA-256 |
 
 `MANIFEST.tsv` lists the keys, shapes and dtypes of every file.
 
@@ -94,8 +94,8 @@ two frames within a day. The cause is in the sequencing step; see `PORTING_NOTES
 
 ## Files tracked here
 
-`CHECKSUMS.tsv`, `MANIFEST.tsv`, `expected_table2.csv` (every Table 2 cell at full precision, with the
+`CHECKSUMS.tsv`, `MANIFEST.tsv`, `expected_table2.csv` (every Table 1 cell at full precision, with the
 bootstrap settings: B = 5000, seed 20260806, day blocks), `expected_rebuild.csv` (the same on the 1912
 samples obtainable from today's SIRTA files), `rebuild_excluded.csv`, `expected_synthetic.csv` (a
-consistency-check table for `samples/synthetic_2023`, scored by `eval/check_synthetic.py` -- not a Table 2
+consistency-check table for `samples/synthetic_2023`, scored by `eval/check_synthetic.py` -- not a Table 1
 reference; see `samples/synthetic_2023/README.md`) and this README. The `.npz` files are not in git.

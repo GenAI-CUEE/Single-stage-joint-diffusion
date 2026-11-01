@@ -5,7 +5,7 @@ files. The code is copied from the preprocessing repository that built the paper
 are that year, image size and output locations are parameters, the site elevation is a constant, and the FTP
 logins are read from the environment (see `PORTING_NOTES.md`, Preprocessing).
 
-Needed only to rebuild the data. Reproducing Table 2 from the stored forecasts needs the built folder, not
+Needed only to rebuild the data. Reproducing Table 1 from the stored forecasts needs the built folder, not
 this code's intermediate files.
 
 ## 1. Get the raw data from SIRTA
@@ -38,7 +38,7 @@ only 2023-04-01.
 
 **Downloading today gives a slightly different record.** In February 2025 SIRTA re-issued the 2023 irradiance
 files, marking as unusable some minutes that were still provisional when the paper's copy was made. The build
-then lacks 86 of the 1998 test samples used for Table 2; the scoring script detects this and compares against
+then lacks 86 of the 1998 test samples used for Table 1; the scoring script detects this and compares against
 `prediction_samples/expected_rebuild.csv` instead. See `prediction_samples/README.md`. The other 1998-86=1912
 keep their identity (first-target timestamp) but are not all guaranteed to be built from the same rows as the
 paper's: a window whose 16-frame span crosses a dropped minute shifts by a row despite matching that

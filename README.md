@@ -3,17 +3,20 @@
 Code, trained weights and stored forecasts for:
 
 > K. Suwandee and S. Suwanwimolkul. *Single-stage joint diffusion of sky images and clear-sky index for ultra-short-term irradiance forecasting: what the frame-to-irradiance stage discards.* Submitted to Elsevier, 2026.
-> https://www.researchgate.net/publication/414963178 (ResearchGate)
+> https://www.researchgate.net/publication/414963178 (ResearchGate preprint of an earlier version)
+
+Table, section and appendix numbers in this repository follow the revised paper. In the ResearchGate
+preprint the comparison table reproduced here is Table 2; its content is unchanged.
 
 The model forecasts the next sixteen minutes of sky images and clear-sky index together, in one diffusion
 process, from eight past sky images and no measured irradiance at the input. This repository reproduces the
-paper's comparison of the proposed model against twelve baseline configurations (Table 2).
+paper's comparison of the proposed model against twelve baseline configurations (Table 1).
 
 ![Graphical abstract](docs/graphical_abstract.png)
 
 *Single-stage joint diffusion. The clear-sky-index denoiser reads the denoised future sky inside one diffusion
 process (pooled RMSE 104.1 W/m²); a separately trained regressor reading the same generated frames reaches
-150.6 W/m². RMSEs are over the 1998-window matched 2023 test subset; the frames shown are one ramp-up case
+132.2 W/m² (mean of the ten members' regressed forecasts, scored like Table 1). RMSEs are over the 1998-window matched 2023 test subset; the frames shown are one ramp-up case
 (2023-04-01 14:06).*
 
 ## What is here
@@ -24,8 +27,8 @@ process (pooled RMSE 104.1 W/m²); a separately trained regressor reading the sa
 | `utils/` | shared helper code used by the models and scripts |
 | `configs/` | one configuration per method |
 | `weights/` | download instructions and checksums for the trained weights of every method; see `weights/README.md` |
-| `prediction_samples/` | the stored forecasts behind Table 2 (downloaded separately) and the tables they are checked against; see below and `prediction_samples/README.md` |
-| `eval/` | `reproduce_comparison.py` (checks every cell of Table 2), `run_config.py` (runs one configuration), `check_synthetic.py` (runs every method on the synthetic set), `check_window_alignment.py` and `make_subset_indices.py` |
+| `prediction_samples/` | the stored forecasts behind Table 1 (downloaded separately) and the tables they are checked against; see below and `prediction_samples/README.md` |
+| `eval/` | `reproduce_comparison.py` (checks every cell of Table 1), `run_config.py` (runs one configuration), `check_synthetic.py` (runs every method on the synthetic set), `check_window_alignment.py` and `make_subset_indices.py` |
 | `preprocessing/` | fetches SIRTA's raw files and builds the dataset; see `preprocessing/README.md` |
 | `splits/sirta_2023/` | the training, validation and test lists used in the paper, and `test_window_timestamps.csv` (each of the 1998 test windows' 16 frame timestamps, Europe/Paris local time as in `test_subset_ids.csv`, for `eval/check_window_alignment.py`) |
 | `samples/` | `synthetic_2023/` is shipped: a small synthetic set for trying the code without SIRTA data; `sirta_2023/` is not shipped and is built from SIRTA's files |
@@ -37,7 +40,7 @@ process (pooled RMSE 104.1 W/m²); a separately trained regressor reading the sa
 
 | File | What it is | Why it is here |
 |---|---|---|
-| `expected_table2.csv` | every cell of Table 2 (RMSE, FS, CRPS, CRPSS and their 95 % intervals) on the paper's 1998 test samples, at full precision | the scoring script compares your result against it, cell by cell |
+| `expected_table2.csv` | every cell of Table 1 (RMSE, FS, CRPS, CRPSS and their 95 % intervals) on the paper's 1998 test samples, at full precision | the scoring script compares your result against it, cell by cell |
 | `expected_rebuild.csv` | the same table computed on 1912 of those samples | SIRTA re-issued its 2023 irradiance files in February 2025 and marked some minutes that were provisional in the paper's copy as unusable; a dataset built from today's files therefore lacks 86 test samples. The script uses this table when it detects that case, so a recent download can still be checked exactly |
 | `rebuild_excluded.csv` | the 86 test samples missing from a dataset built from today's files, by timestamp | lets the script recognise that case, and lets you see which samples are affected |
 | `expected_synthetic.csv` | point scores (RMSE, FS, CRPS, CRPSS) of the methods that run on `samples/synthetic_2023`, with the smart-persistence reference and per-method tolerances; no intervals, no Xiong | `eval/check_synthetic.py` compares your runs against it, method by method; a consistency check, not a performance result |
@@ -95,7 +98,7 @@ curves, so on its steady windows methods that read the irradiance history, inclu
 almost exact, and only the ramp windows are hard. Xiong does not run on this set: it fits its
 observation-noise term on the validation split, which the set leaves empty.
 
-## Reproduce Table 2
+## Reproduce Table 1
 
 1. **Data.** SIRTA's data is not redistributed. **Follow `preprocessing/README.md`**: it explains how to request
    FTP access from SIRTA, download the 2023 irradiance files and sky images (about 45 GB), and run the build
@@ -106,7 +109,7 @@ observation-noise term on the validation split, which the set leaves empty.
    ```
    python eval/reproduce_comparison.py
    ```
-   This scores every method's stored forecasts against your ground truth and compares every cell of Table 2
+   This scores every method's stored forecasts against your ground truth and compares every cell of Table 1
    with `prediction_samples/expected_table2.csv`. It should end with `183/183 cells PASS`. If your SIRTA
    download is recent, your dataset lacks the 86 samples in `rebuild_excluded.csv`; the script detects this and
    checks against `expected_rebuild.csv` instead, which should also pass on every cell. On any other sample
@@ -132,12 +135,12 @@ python eval/reproduce_comparison.py --mode regenerate [--rows SunSet,Xiong] [--f
 Deterministic methods reproduce exactly, and so does the proposed model on both its arms, given the same
 data, subset order and batch size. SkyGPT's sampler is unseeded and Xiong's forward pass is not bit-for-bit
 deterministic, so their ensembles change from run to run; regenerated scores fall within the confidence
-intervals of Table 2. See `PORTING_NOTES.md`. To run a model on a chosen set of test
+intervals of Table 1. See `PORTING_NOTES.md`. To run a model on a chosen set of test
 windows, `eval/make_subset_indices.py` selects them by timestamp; see
 `configs/samples/joint_x0hat_sample2023.yaml` for an example.
 
 **Run one configuration.** `eval/reproduce_comparison.py --mode regenerate` runs the fixed set of rows behind
-Table 2; to run a single config on its own (for example the sample config above), instead:
+Table 1; to run a single config on its own (for example the sample config above), instead:
 
 ```
 python eval/run_config.py --config configs/samples/joint_x0hat_sample2023.yaml --like propFuture
@@ -146,8 +149,8 @@ python eval/run_config.py --config configs/samples/joint_x0hat_sample2023.yaml -
 Output goes to `outputs/` (gitignored), not `results/` -- `results/` is where `--mode regenerate` writes, and
 this script never touches it.
 
-The RMSE a run prints does not always match Table 2's: for the proposed model and Xiong, the printout is
-the mean of per-horizon RMSEs, while Table 2 (`eval/score.py`, as used by `eval/reproduce_comparison.py`)
+The RMSE a run prints does not always match Table 1's: for the proposed model and Xiong, the printout is
+the mean of per-horizon RMSEs, while Table 1 (`eval/score.py`, as used by `eval/reproduce_comparison.py`)
 pools every error under one square root; every other method that prints an RMSE already equals that pooled
 value.
 
@@ -168,7 +171,22 @@ python main.py
 ```
 This produces the same forecasts as the `run_config.py` command above, in `outputs/`.
 
-**Training** code is included for every method but has been verified in this repository for inference only.
+## Training
+
+Training code is included for every method but has been verified in this repository for inference only.
+The proposed model is trained in five stages run in sequence, each starting from the checkpoint the
+previous one selected (the paper's Appendix C, Table C.1). The released configurations describe the
+model and its sampling; they do not set this stage schedule, which has to be applied by hand.
+
+| Stage | Trains | Frozen | Learning rate | Stopping and checkpoint |
+|---|---|---|---|---|
+| 1 | VAE | — | 1e-6 | early stopping on validation LPIPS (patience 20) |
+| 2 | UNet | VAE | 1e-5, then 1e-6 for the final epochs | best validation LPIPS (patience 20) |
+| 3 | ControlNet | VAE, UNet | 1e-5, cosine schedule | best validation LPIPS (patience 20) |
+| 4 | Joint diffusion, phase 1: image tokenizer, CSI denoiser, temporal refiner | VAE, UNet, ControlNet | 1e-4 | 19–20 epochs; best validation LPIPS + CSI RMSE |
+| 5 | Joint diffusion, phase 2: all except the VAE | VAE | 1e-6, halved on plateau | at most 31 epochs; best validation LPIPS + CSI RMSE |
+
+The released future-sky and past-sky checkpoints are the phase-2 checkpoints at epochs 959 and 954.
 
 ## Citation
 
