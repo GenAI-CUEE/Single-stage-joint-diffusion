@@ -7,7 +7,7 @@ authors:
     given-names: "Kanawut"
   - family-names: "Suwanwimolkul"
     given-names: "Suwichaya"
-repository-code: "https://github.com/GenAI-CUEE/Single-stage-joint-diffusion"
+repository-code: "https://github.com/GenAI-CUEE/single-stage-joint-diffusion"
 license: Apache-2.0
 preferred-citation:
   type: generic

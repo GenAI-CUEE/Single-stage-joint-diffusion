@@ -1,8 +1,8 @@
 """
-Run every method that supports samples/synthetic_2023 -- every Table 2 row
+Run every method that supports samples/synthetic_2023 -- every Table 1 row
 except Xiong -- through eval/run_config.py's own staging and run path (import
 and reuse eval.run_config.run_one; no staging logic is duplicated here), score
-each with eval/score.py exactly as Table 2 is scored, and compare against
+each with eval/score.py exactly as Table 1 is scored, and compare against
 prediction_samples/expected_synthetic.csv.
 
 These are a CONSISTENCY CHECK, not a measure of performance: the set's

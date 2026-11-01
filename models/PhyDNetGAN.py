@@ -11,12 +11,23 @@ clone, same precedent as TSLib_original/ and Sunset_original/).
 Deterministic model (confirmed against the reference authors' own evaluation
 notebook, quan_eval_excld_VideoGPT_and_SkyGPT.ipynb: PhyDNet+GAN's own
 predicted_images array -- labeled "SkyImageGAN" there -- is scored with plain
-MSE/MAE/cosine-similarity, no ensemble/member dimension. The discriminator
-only shapes the *training* loss (adversarial realism term); the generator
+MSE/MAE/cosine-similarity, no ensemble/member dimension; the generator
 itself takes no noise input and produces one deterministic rollout at
 inference). So forecast() follows the Group 3/Sunset deterministic M-tile
-convention, not SkyGPT's genuine stochastic-sample ensembling -- see
-see the module docstring above for the design rationale.
+convention, not SkyGPT's genuine stochastic-sample ensembling.
+
+No adversarial term reaches the generator. In train(), the generator's loss
+(learning_generative: beta_generative * MAE + moment regularisation) is the
+PhyDNet loss alone. The frame discriminator's LSGAN loss,
+beta_discrim * [(D(true) - 1)^2 + D(generated)^2] with beta_discrim = 0.01
+(losses/PhyDNet/losses.py, Discriminative_loss), is computed on the
+generated frames WITHOUT detach and back-propagated (discrim_loss.backward()
+after gen_loss.backward(retain_graph=True)), and both optimisers then step.
+The generator therefore receives the gradient of the discriminator's own
+objective, which pushes D(generated) towards 0, instead of an adversarial
+gradient. The released checkpoint was trained this way and is scored as
+trained; the paper discloses this in its Appendix A ("no adversarial term
+reaches the generator"). See PORTING_NOTES.md, "Known and accepted".
 
 This is a separate file from models/PhyDNet.py on purpose: PhyDNet.py has the
 discriminator wired in unconditionally (no way to get a plain, non-adversarial

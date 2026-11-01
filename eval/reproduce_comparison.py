@@ -1,5 +1,5 @@
 """
-Reproduce the manuscript's comparison table (Table 2). A driver only: every
+Reproduce the manuscript's comparison table (Table 1). A driver only: every
 number printed comes from eval/score.py's and eval/bootstrap.py's copied
 functions -- this file contains no metric arithmetic of its own, only the
 orchestration needed to get each method's forecast array and ground truth to
@@ -68,7 +68,7 @@ PRED_EXPECTED = os.path.join(PRED_DIR, "expected_table2.csv")
 # the post-February-2025 re-issue, which silently drops 86 of the 1998
 # canonical test windows (see build_ground_truth). rebuild_excluded.csv lists
 # exactly those 86 test_ids (from the comparison repo's F38 sample-level
-# analysis); expected_rebuild.csv is Table 2 recomputed on the remaining 1912.
+# analysis); expected_rebuild.csv is Table 1 recomputed on the remaining 1912.
 PRED_EXPECTED_REBUILD = os.path.join(PRED_DIR, "expected_rebuild.csv")
 REBUILD_EXCLUDED_CSV = os.path.join(PRED_DIR, "rebuild_excluded.csv")
 # The npz themselves are too large to track in git and live on Dropbox, same
@@ -81,7 +81,7 @@ PRED_NPZ_DIR = os.path.join(PRED_DIR, "predictions_db")
 # prediction_samples' own build report, R10a step 2 in the comparison repo).
 GT_CONFIG = "configs/xiong.yaml"
 
-# One row per Table 2 method. "arm" keys into weights/CHECKSUMS.tsv; "npz" is
+# One row per Table 1 method. "arm" keys into weights/CHECKSUMS.tsv; "npz" is
 # the filename each model's own forecast() writes into its run's checkpoints/
 # directory, used in --mode regenerate; "short" is the stored-predictions file
 # stem (prediction_samples/<short>.npz), used in --mode stored and by --rows.
@@ -684,7 +684,7 @@ def compare_regenerate(results, expected):
 
 def main():
     ap = argparse.ArgumentParser(
-        description="Reproduce the manuscript's comparison table (Table 2).")
+        description="Reproduce the manuscript's comparison table (Table 1).")
     ap.add_argument("--mode", choices=["stored", "regenerate"], default="stored",
                      help="stored (default): score prediction_samples/ against local ground "
                           "truth, no model/GPU. regenerate: run inference from the released "

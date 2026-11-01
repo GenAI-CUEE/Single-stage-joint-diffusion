@@ -15,7 +15,7 @@ recorded so nobody has to rediscover it.
 - **Authored for the release:** `eval/reproduce_comparison.py`, a driver that loads forecasts and passes
   them to the copied scorer without computing any metric itself, and `train/proposed_one_step.py`, with
   an assertion that checks the gradient topology of the joint model.
-- **Verification.** `eval/reproduce_comparison.py` (stored mode) reproduces every cell of Table 2 at full
+- **Verification.** `eval/reproduce_comparison.py` (stored mode) reproduces every cell of Table 1 at full
   float precision, 183 of 183. Regenerating from the weights reproduces the deterministic rows exactly;
   SkyGPT and Xiong land within their confidence intervals (see below).
 
@@ -41,13 +41,13 @@ recorded so nobody has to rediscover it.
   reproduce to within one intensity level" below), and some windows are built from shifted rows despite
   matching test_id (see the gap-window note under "Data" below for counts and mechanism).
 - **The proposed model's noise depends on batch position, not on the window.** In the configuration behind
-  Table 2 (`seeding_mode: periodic`), each ensemble member's initial noise is seeded once per batch
+  Table 1 (`seeding_mode: periodic`), each ensemble member's initial noise is seeded once per batch
   (`seed + member`), so a window's draw depends on its position within its batch (with `test_batch_size: 4`,
   its position modulo 4 in the evaluation order), not on which window it is. Evaluating the full test set in
   its original order reproduces the paper's forecasts; evaluating a different selection of windows, or a
   dataset rebuilt from SIRTA's current files (which lacks 86 test windows and so shifts later positions),
   gives different, equally valid ensemble draws for most windows. Stored mode is unaffected. The code also
-  offers `seeding_mode: corrected`, which seeds per window; the shipped configurations and Table 2's stored
+  offers `seeding_mode: corrected`, which seeds per window; the shipped configurations and Table 1's stored
   forecasts use `periodic`.
 - No code path sets `torch.backends.cudnn.deterministic` or `torch.use_deterministic_algorithms`.
 - For these reasons the paper's forecasts are shipped as stored predictions (`prediction_samples/`), and
@@ -152,6 +152,14 @@ recorded so nobody has to rediscover it.
 
 ## Known and accepted
 
+- **PhyDNetGAN's generator receives no adversarial gradient.** Its training loss is the PhyDNet loss
+  alone; the discriminator's LSGAN loss (weight 0.01) is back-propagated through the generated frames
+  without `detach`, so the generator follows the discriminator's own gradient, not an adversarial one
+  (`models/PhyDNetGAN.py`, `train()`, the two `backward()` calls before both optimiser steps). The row
+  therefore behaves as PhyDNet with a weak extra term. The released weights were trained this way and
+  are scored as trained; the paper states this in Appendix A. Not changed in this release, because the
+  stored forecasts and Table 1 come from these weights.
+
 - **Xiong's `forecast()` needs a non-empty validation split.** Regardless of `mode`, `forecast()` calls
   `self._prepare_gp(dataset, config)` (`models/Xiong.py:525`) before drawing any forecast. Because the
   shipped `configs/xiong.yaml` sets `Xiong.GP.add_observation_noise: true`, `_prepare_gp()` fits an
@@ -160,7 +168,7 @@ recorded so nobody has to rediscover it.
   variation. A validation split with zero windows -- as in `samples/synthetic_2023`, which leaves Valid
   empty by design -- means that batch loop collects nothing, and `torch.cat(res)` (`models/Xiong.py:773`)
   then raises `RuntimeError: torch.cat(): expected a non-empty list of Tensors`. This is why Xiong is the
-  one Table 2 method that cannot run on the synthetic set (see `samples/synthetic_2023/README.md`).
+  one Table 1 method that cannot run on the synthetic set (see `samples/synthetic_2023/README.md`).
 - **Verified for inference only.** The proposed model's `train()` and `evaluation()` ship complete but
   have not been exercised in this repository.
 - **Importing this codebase no longer requires a GPU; loading checkpoints no longer does either.**
@@ -185,7 +193,7 @@ recorded so nobody has to rediscover it.
   (`models/Xiong.py:117,200,730`, `models/Text2ImageJoint.py:220`,
   `models/Text2ImageJoint_utils/checkpoint_io.py:48`); `models/SkyGPT_utils/vqvae.py:106`
   (`load_from_checkpoint`) still has none, but is unreachable -- never called anywhere in this repository.
-  Verified bit-for-bit unchanged on the GPU path (183/183 Table 2 cells, the proposed model's two arms
+  Verified bit-for-bit unchanged on the GPU path (183/183 Table 1 cells, the proposed model's two arms
   `np.array_equal` against their `results/` reference on the full 1998-window set, and the synthetic sample
   set matching `expected_synthetic.csv`'s central values exactly) before being trusted.
 
@@ -206,10 +214,10 @@ recorded so nobody has to rediscover it.
 
 ## Scope
 
-The release reproduces Table 2. Other tables in the paper come from runs outside this scope, including
-two that can no longer be re-run: the Appendix B design-space survey was scored at 20 sampling steps by a
-script that no longer exists, and four checkpoints of the scalar-only ablation arm, including the one
-reported, are lost.
+The release reproduces Table 1, the comparison table. The paper's other tables (the frozen-regressor
+and image-quality analyses, the per-horizon, sky-condition and ramp breakdowns, the ablations of Section 8
+and Appendix B) were computed with the same scoring code on the same 1998 test samples, but their
+configurations, scripts and stored forecasts are not part of this release.
 
 ## Licences
 

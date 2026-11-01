@@ -45,7 +45,7 @@ to be compared against, a real observation at that exact time.
 `python eval/check_synthetic.py` runs every method that supports this set and checks the result against the
 table below (`prediction_samples/expected_synthetic.csv`), so you can confirm each one still runs correctly
 on your machine. Because this set's irradiance is invented, these scores say nothing about how the methods
-compare on real data, and the ranking below is not the paper's (Table 2). Every row is reported EXACT
+compare on real data, and the ranking below is not the paper's (Table 1). Every row is reported EXACT
 (bit-identical to the table below), CLOSE (within its tolerance) or FAIL. Tolerances were measured on one
 GPU by changing its own numerical settings (TF32, cuDNN algorithm choice), then given a floor of 0.5% of
 each expected score (with a small absolute floor for FS/CRPSS, which can sit near zero) so a correct run on
