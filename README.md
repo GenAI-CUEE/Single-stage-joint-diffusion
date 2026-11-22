@@ -20,6 +20,38 @@ process (pooled RMSE 104.1 W/m²); a separately trained regressor reading the sa
 132.2 W/m² (mean of the ten members' regressed forecasts, scored like Table 1). RMSEs are over the 1998-window matched 2023 test subset; the frames shown are one ramp-up case
 (2023-04-01 14:06).*
 
+## Compared models
+
+**Compared models of Table 1.** ☑ means that their codes have already been included in this repo. The
+groups follow the paper's comparison; each entry links to the paper, the model code in this repository and
+its configuration.
+
+*Scalar forecasters*, which read the measured irradiance history only; each is run without and with the
+clear-sky irradiance I<sub>clr</sub> as an additional input:
+  - [x] **DLinear** - Are Transformers Effective for Time Series Forecasting? [[AAAI 2023]](https://doi.org/10.1609/aaai.v37i9.26317) [[Code]](models/DLinear.py) [[Config]](configs/dlinear_noiclr.yaml) [[Config with I<sub>clr</sub>]](configs/dlinear_wiclr.yaml)
+  - [x] **PatchTST** - A Time Series is Worth 64 Words: Long-term Forecasting with Transformers [[ICLR 2023]](https://openreview.net/forum?id=Jbdc0vTOcol) [[Code]](models/PatchTST.py) [[Config]](configs/patchtst_noiclr.yaml) [[Config with I<sub>clr</sub>]](configs/patchtst_wiclr.yaml)
+  - [x] **TimeXer** - TimeXer: Empowering Transformers for Time Series Forecasting with Exogenous Variables [[NeurIPS 2024]](https://arxiv.org/abs/2402.19072) [[Code]](models/TimeXer.py) [[Config]](configs/timexer_noiclr.yaml) [[Config with I<sub>clr</sub>]](configs/timexer_wiclr.yaml)
+
+*Deterministic sky-image network*, which reads past sky images and the irradiance history:
+  - [x] **SUNSET** - Short-term solar power forecast with deep learning: Exploring optimal input and output configuration [[Solar Energy 2019]](https://doi.org/10.1016/j.solener.2019.06.041) [[Code]](models/Sunset.py) [[Config]](configs/sunset_wiclr.yaml) [[Config without I<sub>clr</sub>]](configs/sunset_noiclr.yaml) (the variant without I<sub>clr</sub> is shown in the paper's per-horizon figures, not in Table 1)
+
+*Video predictors*, which forecast future frames only; their irradiance is read from the generated frames by
+a frozen image-to-irradiance U-Net regressor [[Code]](models/common/unet_regressor.py):
+  - [x] **ConvLSTM** - Convolutional LSTM Network: A Machine Learning Approach for Precipitation Nowcasting [[NeurIPS 2015]](https://arxiv.org/abs/1506.04214) [[Code]](models/ConvLSTM.py) [[Config]](configs/convlstm.yaml)
+  - [x] **PhyDNet** - Disentangling Physical Dynamics from Unknown Factors for Unsupervised Video Prediction [[CVPR 2020]](https://arxiv.org/abs/2003.01460) [[Code]](models/PhyDNet.py) [[Config]](configs/phydnet.yaml)
+  - [x] **PhyDNetGAN** - PhyDNet with a frame discriminator (PhyDNet+GAN), as implemented for SkyGPT: Probabilistic Ultra-short-term Solar Forecasting Using Synthetic Sky Images from Physics-constrained VideoGPT [[Advances in Applied Energy 2024]](https://doi.org/10.1016/j.adapen.2024.100172) [[Code]](models/PhyDNetGAN.py) [[Config]](configs/phydnetgan.yaml)
+
+*Published generative forecasters*:
+  - [x] **SkyGPT** - SkyGPT: Probabilistic Ultra-short-term Solar Forecasting Using Synthetic Sky Images from Physics-constrained VideoGPT [[Advances in Applied Energy 2024]](https://doi.org/10.1016/j.adapen.2024.100172) [[Code]](models/SkyGPT.py) [[Config]](configs/skygpt.yaml)
+  - [x] **Xiong et al.** - Multimodal Ultra-short-term Probabilistic Solar Power Forecasting with Generative AI and Transformer [[Advances in Applied Energy 2025]](https://doi.org/10.1016/j.adapen.2025.100250) [[Code]](models/Xiong.py) [[Config]](configs/xiong.yaml)
+
+*This work*:
+  - [x] **Proposed (joint, future sky)** and **Proposed (joint, past sky)** - Single-stage joint diffusion of sky images and clear-sky index for ultra-short-term irradiance forecasting: what the frame-to-irradiance stage discards [[Preprint 2026]](https://www.researchgate.net/publication/414963178) [[Code]](models/Text2ImageJoint.py) [[Config, future sky]](configs/joint_x0hat_seed1.yaml) [[Config, past sky]](configs/joint_clean_seed1.yaml)
+
+Every skill score is measured against **smart persistence**, which is not a trained model: `eval/score.py`
+reconstructs it from the irradiance data. Where each baseline's code came from, and under which licence, is
+listed in `NOTICE`.
+
 ## What is here
 
 | Path | Contents |
